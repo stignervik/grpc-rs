@@ -1,0 +1,22 @@
+syntax = "proto3";
+package unit;
+
+service Unit {
+    rpc CreateUnit (CreateUnitRequest) returns (CreateUnitReply);
+}
+
+message CreateUnitRequest {
+   string name = 1;
+   string unit_class = 2;
+   string unit_function = 3;
+   string function_block = 4;
+}
+
+message CreateUnitReply {
+    string name = 1;
+    string unit_class = 2;
+    string unit_function = 3;
+    string function_block = 4;
+}
+
+

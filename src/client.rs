@@ -1,21 +1,24 @@
-use hello_world::greeter_client::GreeterClient;
-use hello_world::HelloRequest;
+use unit::unit_client::UnitClient;
+use unit::CreateUnitRequest;
 
-pub mod hello_world {
-    tonic::include_proto!("helloworld");
+pub mod unit {
+    tonic::include_proto!("unit");
 }
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut client = GreeterClient::connect("http://[::1]:50051").await?;
+async fn main() -> Result<(), Box<dyn std::error::Error>> {    
+    let mut client = UnitClient::connect("http://[::1]:50051").await?;
 
-    let request = tonic::Request::new(HelloRequest {
-        name: "Tonic".into(),
+    let request = tonic::Request::new(CreateUnitRequest {
+        name: "Unit 1".into(),
+        unit_class: "Unit class".into(),
+        unit_function: "Unit function".into(),
+        function_block: "Function block".into(),
     });
 
-    let response = client.say_hello(request).await?;
+    let response = client.create_unit(request).await?;
 
-    println!("RESPONSE={:?}", response);
+    println!("RESPONSE Unit Create={:?}", response);
 
     Ok(())
 }
