@@ -1,5 +1,5 @@
 use tonic::{transport::Server, Request, Response, Status};
-
+use tower_http::cors::CorsLayer;
 use unit::unit_server::{Unit, UnitServer};
 use unit::{CreateUnitReply, CreateUnitRequest};
 
@@ -32,10 +32,13 @@ impl Unit for MyUnit {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let addr = "[::1]:50051".parse()?;
+    let addr = "127.0.0.1:50051".parse()?;
     let unit = MyUnit::default();
 
     Server::builder()
+        .accept_http1(true)
+        .layer(CorsLayer::permissive()) // Add CORS middleware
+        .layer(tonic_web::GrpcWebLayer::new()) // Add gRPC-Web middleware
         .add_service(UnitServer::new(unit))
         .serve(addr)
         .await?;
